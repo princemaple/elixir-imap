@@ -1,31 +1,8 @@
-# Eximap
+# UNDER REWRITE
 
-[![Build Status](https://travis-ci.org/Around25/eximap.svg?branch=master)](https://travis-ci.org/Around25/eximap)
-[![Hex Version](https://img.shields.io/hexpm/v/eximap.svg)](https://hex.pm/packages/eximap)
-[![Coverage Status](https://coveralls.io/repos/github/Around25/eximap/badge.svg?branch=master)](https://coveralls.io/github/Around25/eximap?branch=master)
-
-Eximap is an elixir library that can connect to IMAP servers via TLS and execute commands.
-
-## Motivation
-
-We started working with Elixir this year and we wanted to make an internal CRM, but we could not find any library
-that can connect to an IMAP server and load messages and that can be notified of new messages from the server.
-All options were in other languages like nodejs, but we since there is a POP3 library in erlang there should be one
-for IMAP as well.
-
-## Roadmap
-
-Completed:
-- open an TLS connection to an IMAP server
-- login using an email account and password (PLAIN AUTH over TLS)
-- Execute commands and return the result as an Elixir structure
-- Format each response as either a map or a structure for easier interaction.
-
-Under development:
-- Handle binary responses
-
-Planned:
-- Handle requests and responses asyncronously
+```
+.....
+```
 
 ## Development
 
@@ -53,40 +30,21 @@ mix test
 
 ## Usage
 
-First configure the connection to your IMAP server:
-
-```yaml
-config :eximap,
-  account: "admin@localhost.dev",
-  password: "secret",
-  use_ssl: true,
-  incoming_mail_server: "localhost.dev",
-  incoming_port: 993, #TLS
 ```
-
-Then start the connection to the server by calling the start_link method and execute commands.
-
-```bash
-iex> {:ok, pid} = Eximap.Imap.Client.start_link()
-iex> req = Eximap.Imap.Request.noop()
-iex> Eximap.Imap.Client.execute(pid, req) |> Map.from_struct()
-%{body: [%{}], error: nil,
-         message: "NOOP completed (0.000 + 0.000 secs).", partial: false,
-         request: %Eximap.Imap.Request{command: "NOOP", params: [],
-          tag: "EX1"}, status: "OK"}
+......
 ```
 
 ## Installation
 
 Eximap in [available in Hex](https://hex.pm/docs/publish) and can be installed
-by adding `eximap` to your list of dependencies in `mix.exs`:
+by adding `imap` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:eximap, "~> 0.1.1-dev"}
+    {:imap, "~> 0.1"}
   ]
 end
 ```
 
-The documentation is available here: https://hexdocs.pm/eximap/readme.html
+The documentation is available here: https://hexdocs.pm/imap/readme.html
