@@ -1,4 +1,4 @@
-defmodule Eximap.Socket do
+defmodule Imap.Socket do
   @moduledoc """
   A socket module that abstracts away the type of the connection it has with a server.
   """

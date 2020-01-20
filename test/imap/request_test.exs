@@ -1,6 +1,6 @@
 defmodule RequestTest do
   use ExUnit.Case
-  alias Eximap.Imap.Request
+  alias Imap.Request
 
   test "NOOP shouldnt have trailing whitespace before CRLF" do
     noop = Request.noop()

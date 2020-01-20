@@ -1,7 +1,7 @@
-defmodule Eximap.Client do
-  alias Eximap.Imap.Request
-  alias Eximap.Imap.Response
-  alias Eximap.Socket
+defmodule Imap.Client do
+  alias Imap.Request
+  alias Imap.Response
+  alias Imap.Socket
 
   alias __MODULE__
 

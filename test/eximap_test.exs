@@ -1,11 +1,11 @@
-defmodule EximapTest do
+defmodule ImapTest do
   use ExUnit.Case, async: false
-  alias Eximap.Imap.{Client, Request}
-  doctest Eximap
-  doctest Eximap.Socket
-  doctest Eximap.Imap.Client
-  doctest Eximap.Imap.Request
-  doctest Eximap.Imap.Response
+  alias Imap.{Client, Request}
+  doctest Imap
+  doctest Imap.Socket
+  doctest Imap.Client
+  doctest Imap.Request
+  doctest Imap.Response
 
   @large_mailbox_message_count 500
 

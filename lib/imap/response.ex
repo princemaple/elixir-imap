@@ -1,4 +1,4 @@
-defmodule Eximap.Imap.Response do
+defmodule Imap.Response do
   @moduledoc ~S"""
   Parse responses returned by the IMAP server and convert them to a structured format
   """
@@ -44,6 +44,6 @@ defmodule Eximap.Imap.Response do
     item = Keyword.get(opts, :item, %{})
     message = Keyword.get(opts, :message, "")
     partial = Keyword.get(opts, :partial, true)
-    %Eximap.Imap.Response{resp | body: [item | resp.body], message: message, status: status, partial: partial}
+    %Imap.Response{resp | body: [item | resp.body], message: message, status: status, partial: partial}
   end
 end

@@ -36,7 +36,7 @@ mix test
 
 ## Installation
 
-Eximap in [available in Hex](https://hex.pm/docs/publish) and can be installed
+Imap in [available in Hex](https://hex.pm/docs/publish) and can be installed
 by adding `imap` to your list of dependencies in `mix.exs`:
 
 ```elixir

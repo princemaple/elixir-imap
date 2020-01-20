@@ -1,24 +1,23 @@
-defmodule Eximap.Mixfile do
+defmodule Imap.Mixfile do
   use Mix.Project
 
-  @version "0.1.2-dev"
+  @version "0.1.0"
 
   def project do
     [
-      app: :eximap,
+      app: :imap,
       version: @version,
-      elixir: "~> 1.5",
-      build_embedded: Mix.env == :prod,
-      start_permanent: Mix.env == :prod,
+      elixir: "~> 1.9",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
       package: package(),
       deps: deps(),
       description: "A simple library to interact with an IMAP server",
 
       # Docs
-      name: "Eximap",
-      source_url: "https://github.com/around25/eximap",
-      homepage_url: "https://around25.com",
-      test_coverage: [tool: ExCoveralls],
+      name: "Imap",
+      source_url: "https://github.com/around25/imap",
+      homepage_url: "https://pochen.me",
       preferred_cli_env: [coveralls: :test],
       docs: docs()
     ]
@@ -26,11 +25,11 @@ defmodule Eximap.Mixfile do
 
   defp package do
     [
-      name: "eximap",
+      name: "imap",
       files: ["lib", "mix.exs", "README*", "LICENSE*"],
-      maintainers: ["Cosmin Harangus <cosmin@around25.com>"],
+      maintainers: ["Po Chen <chenpaul914@gmail.com>"],
       licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/around25/eximap"},
+      links: %{"GitHub" => "https://github.com/princemaple/imap"}
     ]
   end
 
@@ -45,9 +44,6 @@ defmodule Eximap.Mixfile do
   end
 
   defp docs do
-    [
-      main: "readme",
-      extras: ["README.md", "DEVELOPER.md", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md"]
-    ]
+    [main: "readme", extras: ["README.md"]]
   end
 end
