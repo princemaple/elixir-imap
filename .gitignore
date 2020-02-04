@@ -21,3 +21,5 @@ erl_crash.dump
 .idea
 *.iml
 mix.lock
+
+.iex.exs
