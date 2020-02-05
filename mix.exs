@@ -40,7 +40,10 @@ defmodule Imap.Mixfile do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    [{:mail, path: "../elixir-mail"}]
+    [
+      {:mail, path: "../elixir-mail"},
+      {:abnf_parsec, path: "../abnf_parsec"}
+    ]
   end
 
   defp docs do
