@@ -6,6 +6,7 @@ defmodule Imap.Parser do
       "atom" => {:reduce, {List, :to_string, []}},
       "nz-number" => {:reduce, {List, :to_string, []}},
       "tag" => {:reduce, {List, :to_string, []}},
+      "mailbox" => {:reduce, {List, :to_string, []}},
       "number" => {:reduce, {List, :to_string, []}}
     },
     unbox: [
@@ -14,6 +15,7 @@ defmodule Imap.Parser do
       "ASTRING-CHAR",
       "QUOTED-CHAR",
       "astring",
+      "nstring",
       "string",
       "resp-text-code",
       "text",

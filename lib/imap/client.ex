@@ -4,6 +4,8 @@ defmodule Imap.Client do
 
   alias __MODULE__
 
+  require Logger
+
   defstruct [:conn, tag_number: 1]
 
   @moduledoc """
@@ -40,34 +42,30 @@ defmodule Imap.Client do
 
   defp imap_send(%{conn: conn}, req) do
     message = Request.raw(req)
+
     imap_send_raw(conn, message)
+
     imap_receive(conn, req)
+    |> Imap.Parser.response()
   end
 
   defp imap_send_raw(conn, msg) do
-    IO.puts "=== Sending ==="
-    IO.puts msg
-    IO.puts "==============="
+    Logger.debug "=== Sending ==="
+    Logger.debug msg
+    Logger.debug "==============="
     Socket.send(conn, msg)
   end
 
   defp imap_receive(conn, req) do
-    message = assemble_msg(conn, req.tag)
-    Task.start(fn ->
-      message
-      |> Imap.Parser.response()
-      |> IO.inspect
-    end)
-    message
-    # %Response{request: req} |> parse_message(msg)
+    assemble_msg(conn, req.tag)
   end
 
   defp assemble_msg(conn, tag) do
     {:ok, message} = Socket.recv(conn)
 
-    IO.puts "=== Receiving ==="
-    IO.puts message
-    IO.puts "================="
+    Logger.debug "=== Receiving ==="
+    Logger.debug message
+    Logger.debug "================="
 
     if Regex.match?(~r/^.*#{tag} .*\r\n$/s, message) do
       message
