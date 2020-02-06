@@ -32,22 +32,26 @@ defmodule Imap.Parser do
 
   defcombinatorp :literal_text,
                  repeat_while(ascii_char([{:not, 0}]), {:not_end, []})
-                 |> string("\r\n")
                  |> reduce({List, :to_string, []})
 
   defparsec :literal,
             ignore(string("{"))
             |> parsec(:number)
             |> ignore(string("}"))
+            |> post_traverse({:set_literal_size, []})
             |> ignore(parsec(:core_crlf))
             |> parsec(:literal_text)
             |> tag(:literal)
 
-  defp not_end(<<"\r\n)\r\n", _::binary>>, context, _, _) do
-    {:halt, context}
+  defp set_literal_size(_rest, [number: number] = args, context, _, _) do
+    {args, Map.put(context, :literal_size, number)}
   end
 
-  defp not_end(_, context, _, _) do
-    {:cont, context}
+  defp not_end(_rest, %{literal_size: 0} = context, _, _) do
+    {:halt, Map.delete(context, :literal_size)}
+  end
+
+  defp not_end(_rest, %{literal_size: size} = context, _, _) when size > 0 do
+    {:cont, %{context | literal_size: size - 1}}
   end
 end
