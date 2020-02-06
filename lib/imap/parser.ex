@@ -31,7 +31,7 @@ defmodule Imap.Parser do
             integer(min: 1) |> unwrap_and_tag(:number)
 
   defcombinatorp :literal_text,
-                 repeat_while(ascii_char([{:not, 0}]), {:not_end, []})
+                 repeat_while(ascii_char([{:not, 0}]), {:not_end_of_literal, []})
                  |> reduce({List, :to_string, []})
 
   defparsec :literal,
@@ -47,11 +47,11 @@ defmodule Imap.Parser do
     {args, Map.put(context, :literal_size, number)}
   end
 
-  defp not_end(_rest, %{literal_size: 0} = context, _, _) do
+  defp not_end_of_literal(_rest, %{literal_size: 0} = context, _, _) do
     {:halt, Map.delete(context, :literal_size)}
   end
 
-  defp not_end(_rest, %{literal_size: size} = context, _, _) when size > 0 do
+  defp not_end_of_literal(_rest, %{literal_size: size} = context, _, _) when size > 0 do
     {:cont, %{context | literal_size: size - 1}}
   end
 end
