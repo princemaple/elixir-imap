@@ -3,19 +3,15 @@ defmodule Imap.Response do
   Parse responses returned by the IMAP server and convert them to a structured format
   """
 
-  def parse(type, {%Imap.Client{}, response}) do
-    parse(type, response)
+  def parse({%Imap.Client{}, response}) do
+    parse(response)
   end
 
-  def parse(type, {:ok, [response: response], "", _, _, _}) do
-    parse(type, response)
+  def parse({:ok, [response: response], "", _, _, _}) do
+    parse(response)
   end
 
-  def parse(type, parts) when type in [:select, :examine] do
-    {:ok, Enum.map(parts, &parse_message_data/1)}
-  end
-
-  def parse(:fetch, parts) do
+  def parse(parts) do
     {:ok, Enum.map(parts, &parse_message_data/1)}
   end
 
@@ -33,13 +29,6 @@ defmodule Imap.Response do
 
   defp parse_message_data(
          {:response_data, ["*", " ", {:resp_cond_state, ["OK", " ", {:resp_text, data}]}, _]}
-       ) do
-    data
-  end
-
-  defp parse_message_data(
-         {:response_done,
-          [response_tagged: [_tag, " ", {:resp_cond_state, ["OK", " ", {:resp_text, data}]}, _]]}
        ) do
     data
   end
@@ -66,6 +55,13 @@ defmodule Imap.Response do
           ]}
        ) do
     msg_att_static |> parse_msg_att_static() |> Mail.Parsers.RFC2822.parse()
+  end
+
+  defp parse_message_data(
+         {:response_done,
+          [response_tagged: [_tag, " ", {:resp_cond_state, ["OK", " ", {:resp_text, data}]}, _]]}
+       ) do
+    data
   end
 
   defp parse_msg_att_static(["RFC822", " ", {:literal, [_number, body]}]) do
