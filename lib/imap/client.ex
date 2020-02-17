@@ -1,13 +1,14 @@
 defmodule Imap.Client do
   alias Imap.Parser
   alias Imap.Request
+  alias Imap.Response
   alias Imap.Socket
 
   alias __MODULE__
 
   require Logger
 
-  defstruct [:conn, tag_number: 1]
+  defstruct [:conn, :capability, tag_number: 1]
 
   @moduledoc """
   Imap Client GenServer
@@ -25,10 +26,8 @@ defmodule Imap.Client do
     conn_opts = [:binary, active: false] ++ Enum.into(opts, [])
 
     {:ok, conn} = Socket.connect(socket_module, host, port, init_fn, conn_opts)
-    client = %Client{conn: {socket_module, conn}}
-
-    # todo: parse the server attributes and store them in the state
-    IO.inspect(imap_receive_raw(client))
+    conn = {socket_module, conn}
+    client = %Client{conn: conn, capability: imap_receive_raw(conn)}
 
     exec(client, Request.login(username, password))
   end
@@ -77,7 +76,7 @@ defmodule Imap.Client do
     end
   end
 
-  defp imap_receive_raw(%{conn: conn}) do
+  defp imap_receive_raw(conn) do
     {:ok, msg} = Socket.recv(conn)
     msg
   end
