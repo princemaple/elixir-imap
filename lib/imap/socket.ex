@@ -4,8 +4,7 @@ defmodule Imap.Socket do
   """
 
   @doc false
-  def connect(socket_module, host, port, init_fn, opts) do
-    init_fn.()
+  def connect(socket_module, host, port, opts) do
     socket_module.connect(host, port, opts)
   end
 

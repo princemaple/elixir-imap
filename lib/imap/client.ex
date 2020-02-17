@@ -22,10 +22,20 @@ defmodule Imap.Client do
     {password, opts} = Map.pop(opts, :password)
 
     {socket_module, opts} = Map.pop(opts, :socket_module, :ssl)
-    {init_fn, opts} = Map.pop(opts, :init_fn)
+    {init, opts} = Map.pop(opts, :init)
     conn_opts = [:binary, active: false] ++ Enum.into(opts, [])
 
-    {:ok, conn} = Socket.connect(socket_module, host, port, init_fn, conn_opts)
+    :ok =
+      case init do
+        nil ->
+          :ok
+        f when is_function(f) ->
+          f.()
+        {m, f, a} when is_atom(m) and is_atom(f) and is_list(a) ->
+          apply(m, f, a)
+      end
+
+    {:ok, conn} = Socket.connect(socket_module, host, port, conn_opts)
     conn = {socket_module, conn}
     client = %Client{conn: conn, capability: imap_receive_raw(conn)}
 
