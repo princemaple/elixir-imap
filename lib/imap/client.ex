@@ -21,7 +21,7 @@ defmodule Imap.Client do
     {username, opts} = Map.pop(opts, :username)
     {password, opts} = Map.pop(opts, :password)
 
-    {socket_module, opts} = Map.pop(opts, :socket_module)
+    {socket_module, opts} = Map.pop(opts, :socket_module, :ssl)
     {init_fn, opts} = Map.pop(opts, :init_fn)
     conn_opts = [:binary, active: false] ++ Enum.into(opts, [])
 
