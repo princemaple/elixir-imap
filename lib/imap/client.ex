@@ -40,7 +40,7 @@ defmodule Imap.Client do
     resp =
       imap_receive(client, req)
       |> Parser.response()
-      # |> Response.parse()
+      |> Response.parse()
 
     {%{client | tag_number: tag_number + 1}, resp}
   end
