@@ -15,9 +15,9 @@ defmodule Imap.Client do
   """
 
   def new(opts) do
-    {host, opts} = Map.pop(opts, :incoming_mail_server)
+    {host, opts} = Map.pop(opts, :imap_server)
     host = to_charlist(host)
-    {port, opts} = Map.pop(opts, :incoming_port, 993)
+    {port, opts} = Map.pop(opts, :port, 993)
     {username, opts} = Map.pop(opts, :username)
     {password, opts} = Map.pop(opts, :password)
 
