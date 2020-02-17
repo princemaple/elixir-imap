@@ -6,7 +6,7 @@ defmodule Imap.Request do
 
   alias __MODULE__
 
-  def raw(%Request{tag: tag, command: command, params: params}) do
+  def serialize(%Request{tag: tag, command: command, params: params}) do
     params =
       params
       |> List.flatten()

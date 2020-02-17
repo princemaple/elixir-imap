@@ -46,7 +46,7 @@ defmodule Imap.Client do
   end
 
   defp imap_send(%{conn: conn}, req) do
-    message = Request.raw(req)
+    message = Request.serialize(req)
 
     imap_send_raw(conn, message)
   end
