@@ -39,7 +39,7 @@ defmodule Imap.Mixfile do
   defp deps do
     [
       {:mail, path: "../elixir-mail"},
-      {:abnf_parsec, "~> 0.1"}
+      {:abnf_parsec, "~> 1.0"}
     ]
   end
 
