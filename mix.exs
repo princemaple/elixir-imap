@@ -33,12 +33,13 @@ defmodule Imap.Mixfile do
   end
 
   def application do
-    [extra_applications: [:logger]]
+    [extra_applications: [:logger, :ssl]]
   end
 
   defp deps do
     [
       {:mail, "~> 0.4"},
+      {:castore, "~> 1.0"},
       {:abnf_parsec, "~> 1.0"}
     ]
   end
