@@ -1,10 +1,5 @@
 defmodule Imap.Client do
-  alias Imap.Parser
-  alias Imap.Request
-  alias Imap.Response
-  alias Imap.Socket
-
-  alias __MODULE__
+  alias Imap.{Parser, Request, Response, Socket, Client}
 
   require Logger
 
@@ -29,8 +24,10 @@ defmodule Imap.Client do
       case init do
         nil ->
           :ok
+
         f when is_function(f) ->
           f.()
+
         {m, f, a} when is_atom(m) and is_atom(f) and is_list(a) ->
           apply(m, f, a)
       end
@@ -61,11 +58,11 @@ defmodule Imap.Client do
     imap_send_raw(conn, message)
   end
 
-  defp imap_send_raw(conn, msg) do
+  defp imap_send_raw(conn, message) do
     Logger.debug("=== Sending ===")
-    Logger.debug(msg)
+    Logger.debug(message)
     Logger.debug("===============")
-    Socket.send(conn, msg)
+    Socket.send(conn, message)
   end
 
   defp imap_receive(%{conn: conn}, req) do
@@ -87,7 +84,7 @@ defmodule Imap.Client do
   end
 
   defp imap_receive_raw(conn) do
-    {:ok, msg} = Socket.recv(conn)
-    msg
+    {:ok, message} = Socket.recv(conn)
+    message
   end
 end
