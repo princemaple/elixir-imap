@@ -58,14 +58,14 @@ defmodule Imap.Request do
         {arg, default} -> quote(do: unquote(Macro.var(arg, Elixir)) \\ unquote(default))
       end)
 
-    items =
+    arguments =
       Enum.map(params, fn
         arg when is_atom(arg) -> Macro.var(arg, Elixir)
         {arg, _default} -> Macro.var(arg, Elixir)
       end)
 
     def unquote(op)(unquote_splicing(parameters)) do
-      %Request{command: unquote(command), params: [unquote_splicing(items)]}
+      %Request{command: unquote(command), params: [unquote_splicing(arguments)]}
     end
   end
 end
