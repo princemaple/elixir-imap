@@ -18,7 +18,9 @@ defmodule Imap.Client do
 
     {socket_module, opts} = Map.pop(opts, :socket_module, :ssl)
     {init, opts} = Map.pop(opts, :init)
-    conn_opts = [:binary, active: false] ++ Enum.into(opts, [])
+
+    conn_opts =
+      [:binary, active: false, cacertfile: CAStore.file_path()] ++ Enum.into(opts, [])
 
     :ok =
       case init do
