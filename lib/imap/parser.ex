@@ -7,7 +7,9 @@ defmodule Imap.Parser do
       "nz-number" => {:reduce, {List, :to_string, []}},
       "tag" => {:reduce, {List, :to_string, []}},
       "mailbox" => {:reduce, {List, :to_string, []}},
-      "number" => {:reduce, {List, :to_string, []}}
+      "number" => {:reduce, {List, :to_string, []}},
+      "time" => {:reduce, {List, :to_string, []}},
+      "zone" => {:reduce, {List, :to_string, []}}
     },
     unbox: [
       "TEXT-CHAR",
