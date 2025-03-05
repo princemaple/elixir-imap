@@ -27,7 +27,8 @@ defmodule Imap.Parser do
       "CHAR8"
     ],
     unwrap: ["flag", "atom", "mailbox", "number"],
-    skip: ["number", "literal"]
+    skip: ["number", "literal"],
+    ignore: ["SP", "CRLF", "DQUOTE"]
 
   defparsec :number,
             integer(min: 1) |> unwrap_and_tag(:number)
@@ -41,12 +42,12 @@ defmodule Imap.Parser do
             |> parsec(:number)
             |> ignore(string("}"))
             |> post_traverse({:set_literal_size, []})
-            |> ignore(parsec(:core_crlf))
+            |> ignore(parsec(:crlf))
             |> parsec(:literal_text)
             |> tag(:literal)
 
-  defp set_literal_size(_rest, [number: number] = args, context, _, _) do
-    {args, Map.put(context, :literal_size, number)}
+  defp set_literal_size(rest, [number: number] = args, context, _, _) do
+    {rest, args, Map.put(context, :literal_size, number)}
   end
 
   defp not_end_of_literal(_rest, %{literal_size: 0} = context, _, _) do
