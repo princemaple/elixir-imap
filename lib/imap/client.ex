@@ -11,10 +11,7 @@ defmodule Imap.Client do
 
   def new(opts) do
     {host, opts} = Map.pop(opts, :imap_server)
-    host = to_charlist(host)
     {port, opts} = Map.pop(opts, :port, 993)
-    {username, opts} = Map.pop(opts, :username)
-    {password, opts} = Map.pop(opts, :password)
 
     {socket_module, opts} = Map.pop(opts, :socket_module, :ssl)
     {init, opts} = Map.pop(opts, :init)
@@ -34,24 +31,31 @@ defmodule Imap.Client do
           apply(m, f, a)
       end
 
-    {:ok, conn} = Socket.connect(socket_module, host, port, conn_opts)
+    {:ok, conn} = Socket.connect(socket_module, to_charlist(host), port, conn_opts)
     conn = {socket_module, conn}
-    client = %Client{conn: conn, capability: imap_receive_raw(conn)}
 
-    exec(client, Request.login(username, password))
+    {:ok, agent} =
+      Agent.start_link(fn ->
+        %Client{conn: conn, capability: imap_receive_raw(conn)}
+      end)
+
+    agent
   end
 
-  def exec(%Client{tag_number: tag_number} = client, %Request{} = req) do
-    req = %{req | tag: "EX#{tag_number}"}
+  def exec(client_agent, %Request{} = req) do
+    client =
+      Agent.get_and_update(
+        client_agent,
+        &{&1, %{&1 | tag_number: &1.tag_number + 1}}
+      )
+
+    req = %{req | tag: "EX#{client.tag_number}"}
 
     imap_send(client, req)
 
-    resp =
-      imap_receive(client, req)
-      |> Parser.response()
-      |> Response.extract()
-
-    {%{client | tag_number: tag_number + 1}, resp}
+    imap_receive(client, req)
+    |> Parser.response()
+    |> Response.extract()
   end
 
   defp imap_send(%{conn: conn}, req) do

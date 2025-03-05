@@ -1,6 +1,6 @@
 defmodule Imap.Request do
   @moduledoc """
-
+  IMAP commands being sent to the IMAP server
   """
   defstruct tag: "TAG", command: nil, params: []
 
