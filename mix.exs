@@ -40,7 +40,7 @@ defmodule Imap.Mixfile do
     [
       {:mail, "~> 0.4"},
       {:castore, "~> 1.0"},
-      {:abnf_parsec, "~> 1.0"}
+      {:abnf_parsec, "~> 2.0"}
     ]
   end
 
