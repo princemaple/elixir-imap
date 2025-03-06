@@ -43,7 +43,7 @@ defmodule Imap.Request do
     close: [],
     expunge: [],
     search: [:flags],
-    fetch: [:sequence, macro: "FULL"],
+    fetch: [:sequence, macro: "RFC822"],
     store: [:sequence, :item, :value],
     copy: [:sequence, :mailbox],
     uid: [:params]
