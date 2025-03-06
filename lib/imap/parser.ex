@@ -4,12 +4,12 @@ defmodule Imap.Parser do
     transform: %{
       "text" => {:reduce, {List, :to_string, []}},
       "atom" => {:reduce, {List, :to_string, []}},
-      "nz-number" => {:reduce, {List, :to_string, []}},
       "tag" => {:reduce, {List, :to_string, []}},
       "mailbox" => {:reduce, {List, :to_string, []}},
-      "number" => {:reduce, {List, :to_string, []}},
       "time" => {:reduce, {List, :to_string, []}},
-      "zone" => {:reduce, {List, :to_string, []}}
+      "zone" => {:reduce, {List, :to_string, []}},
+      "quoted" => {:reduce, {List, :to_string, []}},
+      "astring" => {:reduce, {List, :to_string, []}}
     },
     unbox: [
       "TEXT-CHAR",
@@ -23,15 +23,18 @@ defmodule Imap.Parser do
       "text",
       "quoted",
       "digit-nz",
-      "nz-number",
-      "CHAR8"
+      "CHAR8",
+      "nil"
     ],
     unwrap: ["flag", "atom", "mailbox", "number"],
-    skip: ["number", "literal"],
+    skip: ["nz-number", "number", "literal"],
     ignore: ["SP", "CRLF", "DQUOTE"]
 
   defparsec :number,
             integer(min: 1) |> unwrap_and_tag(:number)
+
+  defparsec :nz_number,
+            integer(min: 1) |> unwrap_and_tag(:nz_number)
 
   defcombinatorp :literal_text,
                  repeat_while(ascii_char([{:not, 0}]), {:not_end_of_literal, []})
