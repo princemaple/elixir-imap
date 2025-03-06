@@ -297,8 +297,8 @@ msg-att-dynamic = "FLAGS" SP "(" [flag-fetch *(SP flag-fetch)] ")"
 msg-att-static  = "ENVELOPE" SP envelope / "INTERNALDATE" SP date-time /
                   "RFC822.SIZE" SP number /
                   "RFC822" [".HEADER" / ".TEXT"] SP nstring /
-                  "BODY" ["STRUCTURE"] SP body /
                   "BODY" section ["<" number ">"] SP nstring /
+                  "BODY" ["STRUCTURE"] SP body /
                   "UID" SP uniqueid
                     ; MUST NOT change for a message
 
