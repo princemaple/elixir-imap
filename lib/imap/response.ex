@@ -51,12 +51,20 @@ defmodule Imap.Response do
          {:response_data,
           [
             "*",
-            {:message_data,
-             [_index, "FETCH", {:msg_att, ["(", {:msg_att_static, msg_att_static}, ")"]}]}
+            {:message_data, [_index, "FETCH", {:msg_att, msg_atts}]}
             | _
           ]}
        ) do
-    msg_att_static |> extract_msg_att_static() |> Mail.Parsers.RFC2822.parse()
+    msg_atts
+    |> Enum.reject(&(&1 in ~w|( )|))
+    |> Enum.map(fn
+      {:msg_att_static, msg_att_static} ->
+        msg_att_static
+
+      {:msg_att_dynamic, msg_att_dynamic} ->
+        msg_att_dynamic
+    end)
+    |> Enum.map(&extract_msg_att/1)
   end
 
   defp extract_message_data(
@@ -66,16 +74,44 @@ defmodule Imap.Response do
     {tag, message}
   end
 
-  defp extract_msg_att_static(["RFC822", ".HEADER", {:literal, [_number, body]}]) do
-    body
+  defp extract_msg_att(["RFC822", ".HEADER", {:literal, [_number, body]}]) do
+    Mail.Parsers.RFC2822.parse(body)
   end
 
-  defp extract_msg_att_static(["RFC822", {:literal, [_number, body]}]) do
-    body
+  defp extract_msg_att(["RFC822", {:literal, [_number, body]}]) do
+    Mail.Parsers.RFC2822.parse(body)
   end
 
-  defp extract_msg_att_static(["BODY", _section, {:literal, [_number, body]}]) do
-    body
+  defp extract_msg_att(["BODY", _section, {:literal, [_number, body]}]) do
+    Mail.Parsers.RFC2822.parse(body)
+  end
+
+  defp extract_msg_att(["FLAGS" | flags]) do
+    {:flags, Enum.reject(flags, &(&1 in ~w|( )|))}
+  end
+
+  defp extract_msg_att(["RFC822.SIZE", {:number, number}]) do
+    {:size, number}
+  end
+
+  defp extract_msg_att([
+         "INTERNALDATE",
+         {:date_time,
+          [
+            {:date_day_fixed, date},
+            "-",
+            {:date_month, month},
+            "-",
+            {:date_year, year},
+            {:time, time},
+            {:zone, zone}
+          ]}
+       ]) do
+    {:internal_date, {date, month, year, time, zone}}
+  end
+
+  defp extract_msg_att(["ENVELOPE", {:envelope, envelope}]) do
+    {:envelope, envelope}
   end
 
   defp extract_mbx_flags(flags) do

@@ -1,4 +1,6 @@
 defmodule Imap.Parser do
+  @external_resource "priv/imap.abnf"
+
   use AbnfParsec,
     abnf_file: "priv/imap.abnf",
     transform: %{
@@ -6,6 +8,8 @@ defmodule Imap.Parser do
       "atom" => {:reduce, {List, :to_string, []}},
       "tag" => {:reduce, {List, :to_string, []}},
       "mailbox" => {:reduce, {List, :to_string, []}},
+      "date-year" => {:reduce, {List, :to_string, []}},
+      "date-day-fixed" => {:reduce, {List, :to_string, []}},
       "time" => {:reduce, {List, :to_string, []}},
       "zone" => {:reduce, {List, :to_string, []}},
       "quoted" => {:reduce, {List, :to_string, []}},
@@ -26,7 +30,17 @@ defmodule Imap.Parser do
       "CHAR8",
       "nil"
     ],
-    unwrap: ["flag", "atom", "mailbox", "number"],
+    unwrap: [
+      "flag",
+      "atom",
+      "mailbox",
+      "number",
+      "date-year",
+      "date-month",
+      "date-day-fixed",
+      "time",
+      "zone"
+    ],
     skip: ["nz-number", "number", "literal"],
     ignore: ["SP", "CRLF", "DQUOTE"]
 
