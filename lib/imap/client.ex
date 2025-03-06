@@ -10,7 +10,9 @@ defmodule Imap.Client do
   """
 
   def new(opts) do
-    {host, opts} = Map.pop(opts, :imap_server)
+    opts = Enum.into(opts, %{})
+
+    {host, opts} = Map.pop(opts, :host)
     {port, opts} = Map.pop(opts, :port, 993)
 
     {socket_module, opts} = Map.pop(opts, :socket_module, :ssl)
