@@ -66,6 +66,10 @@ defmodule Imap.Response do
     {tag, message}
   end
 
+  defp extract_msg_att_static(["RFC822", ".HEADER", {:literal, [_number, body]}]) do
+    body
+  end
+
   defp extract_msg_att_static(["RFC822", {:literal, [_number, body]}]) do
     body
   end
