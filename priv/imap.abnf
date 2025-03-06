@@ -199,10 +199,10 @@ fetch           = "FETCH" SP sequence-set SP ("ALL" / "FULL" / "FAST" /
                   fetch-att / "(" fetch-att *(SP fetch-att) ")")
 
 fetch-att       = "ENVELOPE" / "FLAGS" / "INTERNALDATE" /
-                  "RFC822" [".HEADER" / ".SIZE" / ".TEXT"] /
-                  "BODY" ["STRUCTURE"] / "UID" /
+                  "RFC822" [".HEADER" / ".SIZE" / ".TEXT"] / "UID" /
+                  "BODY.PEEK" section ["<" number "." nz-number ">"] /
                   "BODY" section ["<" number "." nz-number ">"] /
-                  "BODY.PEEK" section ["<" number "." nz-number ">"]
+                  "BODY" ["STRUCTURE"]
 
 flag            = "\Answered" / "\Flagged" / "\Deleted" /
                   "\Seen" / "\Draft" / flag-keyword / flag-extension
