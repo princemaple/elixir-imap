@@ -150,7 +150,7 @@ date            = date-text / DQUOTE date-text DQUOTE
 date-day        = 1*2DIGIT
                     ; Day of month
 
-date-day-fixed  = (SP DIGIT) / 2DIGIT
+; Note(removed): date-day-fixed  = (SP DIGIT) / 2DIGIT
                     ; Fixed-format version of date-day
 
 date-month      = "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun" /
@@ -160,7 +160,8 @@ date-text       = date-day "-" date-month "-" date-year
 
 date-year       = 4DIGIT
 
-date-time       = DQUOTE date-day-fixed "-" date-month "-" date-year
+date-time       = DQUOTE date-text
+                    ; NOTE(replaced): `date-day-fixed "-" date-month "-" date-year` with date-text
                   SP time SP zone DQUOTE
 
 delete          = "DELETE" SP mailbox

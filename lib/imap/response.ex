@@ -96,16 +96,17 @@ defmodule Imap.Response do
 
   defp extract_msg_att([
          "INTERNALDATE",
-         {:date_time,
-          [
-            {:date_day_fixed, date},
-            "-",
-            {:date_month, month},
-            "-",
-            {:date_year, year},
-            {:time, time},
-            {:zone, zone}
-          ]}
+         date_time: [
+           date_text: [
+             {:date_day, date},
+             "-",
+             {:date_month, month},
+             "-",
+             {:date_year, year}
+           ],
+           time: time,
+           zone: zone
+         ]
        ]) do
     {:internal_date, {date, month, year, time, zone}}
   end
