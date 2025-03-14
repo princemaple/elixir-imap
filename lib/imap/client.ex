@@ -148,6 +148,16 @@ defmodule Imap.Client do
   end
 
   @doc """
+  Perform a FETCH command on the server to get a list of messages.
+  """
+  def fetch(client, sequence_set) do
+    with true <- Agent.get(client, & &1.logged_in),
+         {:ok, resp} <- Client.exec(client, Request.fetch(sequence_set)) do
+      resp
+    end
+  end
+
+  @doc """
   Execute an IMAP command with the client.
   """
   def exec(client_agent, %Request{} = req) do
