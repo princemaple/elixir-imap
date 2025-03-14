@@ -153,7 +153,9 @@ defmodule Imap.Client do
   def fetch(client, sequence_set) do
     with true <- Agent.get(client, & &1.logged_in),
          {:ok, resp} <- Client.exec(client, Request.fetch(sequence_set)) do
-      resp
+      for %Mail.Message{} = message <- List.flatten(resp) do
+        message
+      end
     end
   end
 
