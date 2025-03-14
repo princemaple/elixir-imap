@@ -3,10 +3,6 @@ defmodule Imap.Response do
   Extract response info returned by the IMAP server and convert them to a structured format
   """
 
-  def extract({%Imap.Client{}, response}) do
-    extract(response)
-  end
-
   def extract({:ok, [response: response], "", _, _, _}) do
     extract(response)
   end
@@ -27,6 +23,7 @@ defmodule Imap.Response do
     {:flags, Enum.reject(flags, &is_binary/1)}
   end
 
+  # For LIST response
   defp extract_message_data(
          {:response_data,
           [
@@ -47,12 +44,12 @@ defmodule Imap.Response do
     message
   end
 
+  # For FETCH response
   defp extract_message_data(
          {:response_data,
           [
             "*",
             {:message_data, [_index, "FETCH", {:msg_att, msg_atts}]}
-            | _
           ]}
        ) do
     msg_atts

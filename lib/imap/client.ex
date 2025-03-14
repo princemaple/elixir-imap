@@ -3,7 +3,14 @@ defmodule Imap.Client do
 
   require Logger
 
-  defstruct [:conn, :capability, tag_number: 1]
+  defstruct [
+    :conn,
+    :capability,
+    selected_mailbox: nil,
+    mailboxes: [],
+    logged_in: false,
+    tag_number: 1
+  ]
 
   @moduledoc """
   Imap Client GenServer
@@ -42,6 +49,53 @@ defmodule Imap.Client do
       end)
 
     agent
+  end
+
+  def login(client, username, password) do
+    {:ok, _} = Client.exec(client, Request.login(username, password))
+    Agent.update(client, &Map.put(&1, :logged_in, true))
+  end
+
+  def list(client) do
+    with true <- Agent.get(client, & &1.logged_in),
+         {:ok, list} <- Client.exec(client, Request.list()) do
+      for {scope, name, flags} <- list do
+        %Imap.Mailbox{scope: scope, name: name, flags: flags}
+      end
+    end
+    |> tap(fn mailboxes ->
+      Agent.update(client, &Map.put(&1, :mailboxes, mailboxes))
+    end)
+  end
+
+  def select(client, mailbox_name) do
+    with true <- Agent.get(client, & &1.logged_in),
+         {:ok, resp} <- Client.exec(client, Request.select(mailbox_name)) do
+      Agent.update(client, &Map.put(&1, :selected_mailbox, mailbox_name))
+
+      mailbox_status =
+        Enum.reduce(resp, %{}, fn
+          {"EXISTS", n}, acc -> Map.put(acc, :exists, n)
+          {"RECENT", n}, acc -> Map.put(acc, :recent, n)
+          _, acc -> acc
+        end)
+
+      Agent.update(client, fn state ->
+        update_in(
+          state,
+          [Access.key!(:mailboxes), Access.find(fn %{name: name} -> name == mailbox_name end)],
+          &Map.merge(&1, mailbox_status)
+        )
+      end)
+
+      Agent.get(
+        client,
+        &get_in(&1, [
+          Access.key!(:mailboxes),
+          Access.find(fn %{name: name} -> name == mailbox_name end)
+        ])
+      )
+    end
   end
 
   def exec(client_agent, %Request{} = req) do
