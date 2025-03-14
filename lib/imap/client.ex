@@ -52,8 +52,9 @@ defmodule Imap.Client do
   end
 
   def login(client, username, password) do
-    {:ok, _} = Client.exec(client, Request.login(username, password))
-    Agent.update(client, &Map.put(&1, :logged_in, true))
+    with {:ok, _} <- Client.exec(client, Request.login(username, password)) do
+      Agent.update(client, &Map.put(&1, :logged_in, true))
+    end
   end
 
   def list(client) do
