@@ -34,5 +34,5 @@ defmodule Imap.Mailbox do
   - \\Important - Contains important messages
   """
 
-  defstruct name: nil, scope: "/", flags: [], exists: 0, recent: 0
+  defstruct [:name, :scope, :flags, :exists, :recent]
 end
