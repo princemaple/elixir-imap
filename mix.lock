@@ -1,6 +1,6 @@
 %{
   "abnf_parsec": {:hex, :abnf_parsec, "2.0.0", "e3c161864c2477288a82ccb88752721b53e418958e4a18278f65bd313635b914", [:mix], [{:nimble_parsec, "~> 1.4", [hex: :nimble_parsec, repo: "hexpm", optional: false]}], "hexpm", "b0fb69bad80ac21967f379be8e699ae3f2a3e07e1ecb8a2507072f4b51b3f758"},
   "castore": {:hex, :castore, "1.0.12", "053f0e32700cbec356280c0e835df425a3be4bc1e0627b714330ad9d0f05497f", [:mix], [], "hexpm", "3dca286b2186055ba0c9449b4e95b97bf1b57b47c1f2644555879e659960c224"},
-  "mail": {:hex, :mail, "0.4.3", "16df84500780980826d9b52059d24c08fdd75c98f178a7a7ea809ea83fb70542", [:mix], [], "hexpm", "164975550b977e47cab431c403b0e90c8ce542036d32c7189b83839d8d7d391b"},
+  "mail": {:hex, :mail, "0.4.4", "2ed92e3b2dedb2013ba8eef9fb7ace3892e0eae1f45c0658738a72c195f7649b", [:mix], [], "hexpm", "bd44bf3e253d8be9c7f2e59b3253aff1efc1c9fa7d8ab4430c96780683faa8e2"},
   "nimble_parsec": {:hex, :nimble_parsec, "1.4.2", "8efba0122db06df95bfaa78f791344a89352ba04baedd3849593bfce4d0dc1c6", [:mix], [], "hexpm", "4b21398942dda052b403bbe1da991ccd03a053668d147d53fb8c4e0efe09c973"},
 }
