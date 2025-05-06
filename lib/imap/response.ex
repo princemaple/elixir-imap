@@ -116,6 +116,10 @@ defmodule Imap.Response do
     Enum.map(flags, &extract_mbx_flag/1)
   end
 
+  defp extract_mbx_flag({:mbx_list_sflag, ["\\" <> flag]}) do
+    flag
+  end
+
   defp extract_mbx_flag({:mbx_list_oflag, [flag_extension: ["\\", {:atom, flag}]]}) do
     flag
   end
