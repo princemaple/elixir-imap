@@ -147,10 +147,13 @@ defmodule Imap.Client do
   @doc """
   Perform a FETCH command on the server to get a list of messages.
   """
+  @spec fetch(pid(), sequence_set :: String.t()) :: [Mail.Message.t()]
   def fetch(client, sequence_set) do
     do_fetch(client, Request.fetch(sequence_set))
   end
 
+  @spec fetch(pid(), sequence_set :: String.t(), md_items_or_macro :: String.t()) ::
+          [Mail.Message.t()]
   def fetch(client, sequence_set, md_items_or_macro) do
     do_fetch(client, Request.fetch(sequence_set, md_items_or_macro))
   end
@@ -185,7 +188,6 @@ defmodule Imap.Client do
 
   defp imap_send(%{conn: conn}, req) do
     message = Request.serialize(req)
-
     imap_send_raw(conn, message)
   end
 
@@ -203,6 +205,7 @@ defmodule Imap.Client do
 
     Logger.debug("<<<\n#{message}")
 
+    # TODO: improve this part with Stream or something
     if Regex.match?(~r/^.*#{tag} .*\r\n$/s, message) do
       message
     else
