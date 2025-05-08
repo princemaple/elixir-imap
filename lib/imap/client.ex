@@ -124,7 +124,7 @@ defmodule Imap.Client do
   """
   def select(client, mailbox_name) do
     with true <- Agent.get(client, & &1.logged_in),
-         {:ok, resp} <- Client.exec(client, Request.select(mailbox_name)) do
+         {:ok, resp} <- Client.exec(client, Request.select(inspect(mailbox_name))) do
       mailbox_status =
         Enum.reduce(resp, %{}, fn
           {"EXISTS", n}, acc -> Map.put(acc, :exists, n)
