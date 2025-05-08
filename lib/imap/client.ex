@@ -110,8 +110,7 @@ defmodule Imap.Client do
   def list(client, reference \\ ~s|""|, mailbox \\ "%") do
     with true <- Agent.get(client, & &1.logged_in),
          {:ok, list} <- Client.exec(client, Request.list(reference, mailbox)) do
-      for {:mailbox, name, delimiter, flags} <- list,
-          "noselect" not in Enum.map(flags, &String.downcase/1) do
+      for {:mailbox, name, delimiter, flags} <- list do
         %Imap.Mailbox{name: name, delimiter: delimiter, flags: flags}
       end
     end
