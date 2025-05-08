@@ -68,7 +68,7 @@ defmodule Imap.Response do
          {:response_done,
           [response_tagged: [tag, {:resp_cond_state, ["OK", {:resp_text, message}]}]]}
        ) do
-    {:tag, tag, message}
+    {tag, message}
   end
 
   defp extract_msg_att(["RFC822", ".HEADER", {:literal, [_number, body]}]) do
