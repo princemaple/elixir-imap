@@ -36,3 +36,19 @@ defmodule Imap.Mailbox do
 
   defstruct [:name, :scope, :flags, :exists, :recent]
 end
+
+defimpl Inspect, for: Imap.Mailbox do
+  import Inspect.Algebra
+
+  def inspect(mailbox, opts) do
+    concat([
+      "#Imap.Mailbox<",
+      to_doc(Imap.UTF7.decode(mailbox.name), opts),
+      " (",
+      to_doc(mailbox.scope, opts),
+      ") ",
+      to_doc(mailbox.flags, opts),
+      ">"
+    ])
+  end
+end
