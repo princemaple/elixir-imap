@@ -1,5 +1,5 @@
 defmodule Imap.Client do
-  alias Imap.{Parser, Request, Response, Socket, Client}
+  alias Imap.{Parser, Request, Response, Socket, Client, Mailbox}
 
   require Logger
 
@@ -110,8 +110,8 @@ defmodule Imap.Client do
   def list(client, reference \\ ~s|""|, mailbox \\ "%") do
     with true <- Agent.get(client, & &1.logged_in),
          {:ok, list} <- Client.exec(client, Request.list(reference, mailbox)) do
-      for {scope, name, flags} <- list do
-        %Imap.Mailbox{scope: scope, name: name, flags: flags}
+      for {:mailbox, name, delimiter, flags} <- list do
+        %Imap.Mailbox{name: name, delimiter: delimiter, flags: flags}
       end
     end
     |> tap(fn mailboxes ->
@@ -135,7 +135,7 @@ defmodule Imap.Client do
       Agent.update(client, fn state ->
         update_in(
           state,
-          [Access.key!(:mailboxes), Access.find(fn %{name: name} -> name == mailbox_name end)],
+          [Access.key!(:mailboxes), Mailbox.find(mailbox_name)],
           &Map.merge(&1, mailbox_status)
         )
       end)
@@ -143,10 +143,7 @@ defmodule Imap.Client do
       mailbox =
         Agent.get(
           client,
-          &get_in(&1, [
-            Access.key!(:mailboxes),
-            Access.find(fn %{name: name} -> name == mailbox_name end)
-          ])
+          &get_in(&1, [Access.key!(:mailboxes), Mailbox.find(mailbox_name)])
         )
 
       Agent.update(client, &Map.put(&1, :selected_mailbox, mailbox))

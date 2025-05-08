@@ -34,7 +34,15 @@ defmodule Imap.Mailbox do
   - \\Important - Contains important messages
   """
 
-  defstruct [:name, :scope, :flags, :exists, :recent]
+  defstruct [:name, :delimiter, :flags, :exists, :recent]
+
+  def decode_name(mailbox) do
+    Imap.UTF7.decode(mailbox.name)
+  end
+
+  def find(mailbox_name) do
+    Access.find(fn %{name: name} -> name == mailbox_name end)
+  end
 end
 
 defimpl Inspect, for: Imap.Mailbox do
@@ -43,11 +51,13 @@ defimpl Inspect, for: Imap.Mailbox do
   def inspect(mailbox, opts) do
     concat([
       "#Imap.Mailbox<",
-      to_doc(Imap.UTF7.decode(mailbox.name), opts),
+      to_doc(Imap.Mailbox.decode_name(mailbox), opts),
       " (",
-      to_doc(mailbox.scope, opts),
+      to_doc(mailbox.delimiter, opts),
       ") ",
       to_doc(mailbox.flags, opts),
+      " ",
+      if(mailbox.exists, do: "#{mailbox.exists}", else: "TBD"),
       ">"
     ])
   end

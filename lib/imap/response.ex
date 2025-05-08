@@ -31,11 +31,11 @@ defmodule Imap.Response do
             {:mailbox_data,
              [
                "LIST",
-               {:mailbox_list, ["(", {:mbx_list_flags, flags}, ")", scope, {:mailbox, name}]}
+               {:mailbox_list, ["(", {:mbx_list_flags, flags}, ")", delimiter, {:mailbox, name}]}
              ]}
           ]}
        ) do
-    {scope, name, extract_mbx_flags(flags)}
+    {:mailbox, name, delimiter, extract_mbx_flags(flags)}
   end
 
   defp extract_message_data(
@@ -68,7 +68,7 @@ defmodule Imap.Response do
          {:response_done,
           [response_tagged: [tag, {:resp_cond_state, ["OK", {:resp_text, message}]}]]}
        ) do
-    {tag, message}
+    {:tag, tag, message}
   end
 
   defp extract_msg_att(["RFC822", ".HEADER", {:literal, [_number, body]}]) do
