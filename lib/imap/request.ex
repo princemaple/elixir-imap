@@ -68,4 +68,26 @@ defmodule Imap.Request do
       %Request{command: unquote(command), params: [unquote_splicing(arguments)]}
     end
   end
+
+  def sequence_set(s) when is_integer(s) do
+    to_string(s)
+  end
+
+  def sequence_set(s) when is_list(s) do
+    s |> Enum.map(&sequence_set/1) |> Enum.join(",")
+  end
+
+  def sequence_set(%Range{first: first, last: last, step: 1}) do
+    "#{first}:#{last}"
+  end
+
+  def sequence_set(%Range{first: first, last: last, step: -1}) do
+    "#{last}:#{first}"
+  end
+
+  def sequence_set(%Range{} = r) do
+    r |> Enum.to_list() |> sequence_set()
+  end
+
+  def sequence_set(s) when is_binary(s), do: s
 end

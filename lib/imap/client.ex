@@ -157,13 +157,13 @@ defmodule Imap.Client do
   """
   @spec fetch(pid(), sequence_set :: String.t()) :: [Mail.Message.t()]
   def fetch(client, sequence_set) do
-    do_fetch(client, Request.fetch(sequence_set))
+    do_fetch(client, Request.fetch(Request.sequence_set(sequence_set)))
   end
 
   @spec fetch(pid(), sequence_set :: String.t(), md_items_or_macro :: String.t()) ::
           [Mail.Message.t()]
   def fetch(client, sequence_set, md_items_or_macro) do
-    do_fetch(client, Request.fetch(sequence_set, md_items_or_macro))
+    do_fetch(client, Request.fetch(Request.sequence_set(sequence_set), md_items_or_macro))
   end
 
   defp do_fetch(client, cmd) do
