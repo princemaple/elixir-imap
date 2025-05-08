@@ -32,7 +32,8 @@ defmodule Imap.Client do
   - `:host` - The hostname of the IMAP server. (required)
   - `:port` - The port of the IMAP server. Default is 993.
   - `:socket_module` - The socket module to use. Default is `:ssl`.
-  - `:init` - A function or a tuple `{module, function, args}` to be called after the connection is established.
+  - `:login` - A tuple with the username and password. This will be used to log in automatically
+    after the client is created. Users can also call `Client.login/3` manually.
 
   Connection options:
 
@@ -47,7 +48,6 @@ defmodule Imap.Client do
     port = Map.get(opts, :port, 993)
 
     socket_module = Map.get(opts, :socket_module, :ssl)
-    init = Map.get(opts, :init)
 
     conn_opts =
       case socket_module do
@@ -64,27 +64,24 @@ defmodule Imap.Client do
           Map.get(opts, other, [])
       end
 
-    :ok =
-      case init do
-        nil ->
-          :ok
-
-        f when is_function(f) ->
-          f.()
-
-        {m, f, a} when is_atom(m) and is_atom(f) and is_list(a) ->
-          apply(m, f, a)
-      end
-
     {:ok, conn} = Socket.connect(socket_module, to_charlist(host), port, conn_opts)
     conn = {socket_module, conn}
 
-    {:ok, agent} =
-      Agent.start_link(fn ->
-        %Client{conn: conn, capability: imap_receive_raw(conn)}
-      end)
+    Agent.start_link(fn ->
+      %Client{conn: conn, capability: imap_receive_raw(conn)}
+    end)
+    |> tap(fn
+      {:ok, client} ->
+        with {username, password} <- Map.get(opts, :login) do
+          __MODULE__.login(client, username, password)
+        end
 
-    agent
+        {:ok, client}
+
+      {:error, reason} ->
+        Logger.error("Failed to start IMAP client agent: #{inspect(reason)}")
+        {:error, reason}
+    end)
   end
 
   @doc """
