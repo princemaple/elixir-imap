@@ -27,7 +27,7 @@ defmodule Imap.Request do
     authenticate: [:mechanism],
     login: [:username, :password],
     logout: [],
-    list: [reference: ~s|""|, mailbox: "%"],
+    list: [reference: ~s|""|, mailbox: "*"],
     lsub: [reference: ~s|""|, mailbox: ~s|""|],
     select: [:name],
     subscribe: [:name],
