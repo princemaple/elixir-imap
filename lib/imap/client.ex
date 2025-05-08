@@ -94,6 +94,17 @@ defmodule Imap.Client do
   end
 
   @doc """
+  Return the client state.
+  """
+  def info(client) do
+    Agent.get(client, & &1)
+  end
+
+  def info(client, key) do
+    Agent.get(client, &get_in(&1, [Access.key!(key)]))
+  end
+
+  @doc """
   Perform a LIST command on the server to get a list of mailboxes.
   """
   def list(client, reference \\ ~s|""|, mailbox \\ "%") do
