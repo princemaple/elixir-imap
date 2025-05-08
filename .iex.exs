@@ -9,7 +9,7 @@ client = with true <- File.exists?("secrets.json") do
     login: {secrets["username"], secrets["password"]}
   )
 
-  Client.list(client, ~s|""|, "*")
+  Client.list(client)
 
   Client.select(client, "INBOX")
 
