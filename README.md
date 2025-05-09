@@ -1,5 +1,7 @@
 # Blop
 
+> still in DEV
+
 *blop, a new email just dropped...*
 
 IMAP Client for Elixir
