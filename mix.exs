@@ -3,11 +3,13 @@ defmodule Imap.Mixfile do
 
   @version "0.1.0"
 
+  @source_url "https://github.com/princemaple/elixir-imap"
+
   def project do
     [
       app: :imap,
       version: @version,
-      elixir: "~> 1.9",
+      elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
       package: package(),
@@ -16,8 +18,8 @@ defmodule Imap.Mixfile do
 
       # Docs
       name: "Imap",
-      source_url: "https://github.com/princemaple/elixir-imap",
-      homepage_url: "https://pochen.me",
+      source_url: @source_url,
+      homepage_url: @source_url,
       docs: docs()
     ]
   end
@@ -27,8 +29,8 @@ defmodule Imap.Mixfile do
       name: "imap",
       files: ["lib", "priv", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Po Chen <chenpaul914@gmail.com>"],
-      licenses: ["Apache 2.0"],
-      links: %{"GitHub" => "https://github.com/princemaple/elixir-imap"}
+      licenses: ["MIT"],
+      links: %{"GitHub" => @source_url}
     ]
   end
 
