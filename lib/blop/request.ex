@@ -43,7 +43,7 @@ defmodule Blop.Request do
     close: [],
     expunge: [],
     search: [:flags],
-    fetch: [:sequence, macro: "RFC822"],
+    fetch: [:sequence, macro: "BODY.PEEK[]"],
     store: [:sequence, :item, :value],
     copy: [:sequence, :mailbox],
     uid: [:params]
