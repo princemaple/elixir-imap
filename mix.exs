@@ -40,7 +40,7 @@ defmodule Blop.Mixfile do
 
   defp deps do
     [
-      {:mail, "~> 0.4"},
+      {:mail, "~> 0.5"},
       {:castore, "~> 1.0"},
       {:abnf_parsec, "~> 2.0"}
     ]
