@@ -3,7 +3,7 @@ defmodule Blop.Mixfile do
 
   @version "0.1.0"
 
-  @source_url "https://github.com/princemaple/elixir-imap"
+  @source_url "https://github.com/princemaple/blop"
 
   def project do
     [
