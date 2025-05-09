@@ -1,4 +1,4 @@
-defmodule Imap.UTF7 do
+defmodule Blop.UTF7 do
   @moduledoc false
 
   def decode(str) do

@@ -1,4 +1,4 @@
-defmodule Imap.Response do
+defmodule Blop.Response do
   @moduledoc ~S"""
   Extract response info returned by the IMAP server and convert them to a structured format
   """

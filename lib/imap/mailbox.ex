@@ -1,4 +1,4 @@
-defmodule Imap.Mailbox do
+defmodule Blop.Mailbox do
   @moduledoc """
   Message flags:
 
@@ -37,7 +37,7 @@ defmodule Imap.Mailbox do
   defstruct [:name, :delimiter, :flags, :exists, :recent]
 
   def decode_name(mailbox) do
-    Imap.UTF7.decode(mailbox.name)
+    Blop.UTF7.decode(mailbox.name)
   end
 
   def find(mailbox_name) do
@@ -45,13 +45,13 @@ defmodule Imap.Mailbox do
   end
 end
 
-defimpl Inspect, for: Imap.Mailbox do
+defimpl Inspect, for: Blop.Mailbox do
   import Inspect.Algebra
 
   def inspect(mailbox, opts) do
     concat([
-      "#Imap.Mailbox<",
-      to_doc(Imap.Mailbox.decode_name(mailbox), opts),
+      "#Blop.Mailbox<",
+      to_doc(Blop.Mailbox.decode_name(mailbox), opts),
       " (",
       to_doc(mailbox.delimiter, opts),
       ") ",

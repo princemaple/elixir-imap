@@ -1,4 +1,4 @@
-defmodule Imap.Socket do
+defmodule Blop.Socket do
   @moduledoc """
   A socket module that abstracts away the type of the connection it has with a server.
   """

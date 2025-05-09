@@ -1,4 +1,4 @@
-defmodule Imap.Request do
+defmodule Blop.Request do
   @moduledoc """
   IMAP commands being sent to the IMAP server
   """

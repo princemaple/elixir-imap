@@ -1,5 +1,5 @@
-defmodule Imap.Client do
-  alias Imap.{Parser, Request, Response, Socket, Client, Mailbox}
+defmodule Blop.Client do
+  alias Blop.{Parser, Request, Response, Socket, Client, Mailbox}
 
   require Logger
 
@@ -13,7 +13,7 @@ defmodule Imap.Client do
   ]
 
   @moduledoc """
-  ## Imap Client
+  ## Blop Client
 
   It's supposed to be used in a GenServer. It starts a linked Agent to hold to the client state.
 
@@ -111,7 +111,7 @@ defmodule Imap.Client do
     with true <- Agent.get(client, & &1.logged_in),
          {:ok, list} <- Client.exec(client, Request.list(reference, mailbox)) do
       for {:mailbox, name, delimiter, flags} <- list do
-        %Imap.Mailbox{name: name, delimiter: delimiter, flags: flags}
+        %Blop.Mailbox{name: name, delimiter: delimiter, flags: flags}
       end
     end
     |> tap(fn mailboxes ->

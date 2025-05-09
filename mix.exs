@@ -1,4 +1,4 @@
-defmodule Imap.Mixfile do
+defmodule Blop.Mixfile do
   use Mix.Project
 
   @version "0.1.0"
@@ -7,7 +7,7 @@ defmodule Imap.Mixfile do
 
   def project do
     [
-      app: :imap,
+      app: :blop,
       version: @version,
       elixir: "~> 1.14",
       build_embedded: Mix.env() == :prod,
@@ -17,7 +17,7 @@ defmodule Imap.Mixfile do
       description: "A simple library to interact with an IMAP server",
 
       # Docs
-      name: "Imap",
+      name: "Blop",
       source_url: @source_url,
       homepage_url: @source_url,
       docs: docs()

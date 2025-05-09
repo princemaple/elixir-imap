@@ -1,4 +1,4 @@
-defmodule Imap.Parser do
+defmodule Blop.Parser do
   @external_resource "priv/imap.abnf"
 
   use AbnfParsec,

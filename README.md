@@ -1,4 +1,6 @@
-# IMAP
+# Blop
+
+*blop, a new email just dropped...*
 
 IMAP Client for Elixir
 
@@ -7,7 +9,7 @@ IMAP Client for Elixir
 ```elixir
 def deps do
   [
-    {:imap, "~> 0.1"}
+    {:blop, "~> 0.1"}
   ]
 end
 ```
@@ -15,7 +17,7 @@ end
 ## Usage
 
 ```elixir
-alias Imap.Client
+alias Blop.Client
 
 {:ok, client} = Client.new(
   host: "imap.my.host",
