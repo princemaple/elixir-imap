@@ -107,7 +107,7 @@ defmodule Blop.Client do
   @doc """
   Perform a LIST command on the server to get a list of mailboxes.
   """
-  def list(client, reference \\ ~s|""|, mailbox \\ "%") do
+  def list(client, reference \\ ~s|""|, mailbox \\ "*") do
     with true <- Agent.get(client, & &1.logged_in),
          {:ok, list} <- Client.exec(client, Request.list(reference, mailbox)) do
       for {:mailbox, name, delimiter, flags} <- list do
