@@ -26,7 +26,7 @@ defmodule Blop.Mixfile do
 
   defp package do
     [
-      name: "imap",
+      name: "blop",
       files: ["lib", "priv", "mix.exs", "README*", "LICENSE*"],
       maintainers: ["Po Chen <chenpaul914@gmail.com>"],
       licenses: ["MIT"],
