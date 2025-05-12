@@ -1,4 +1,6 @@
 defmodule Blop.Parser do
+  @moduledoc false
+
   @external_resource "priv/imap.abnf"
 
   use AbnfParsec,
