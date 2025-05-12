@@ -123,8 +123,19 @@ defmodule Blop.Client do
   Perform a SELECT command on a mailbox. Sets the currently selected mailbox in the client state.
   """
   def select(client, mailbox_name) do
+    do_select_or_examine(client, mailbox_name, Request.select(inspect(mailbox_name)))
+  end
+
+  @doc """
+  Perform a EXAMINE command on a mailbox. Sets the currently selected mailbox in the client state.
+  """
+  def examine(client, mailbox_name) do
+    do_select_or_examine(client, mailbox_name, Request.examine(inspect(mailbox_name)))
+  end
+
+  defp do_select_or_examine(client, mailbox_name, cmd) do
     with true <- Agent.get(client, & &1.logged_in),
-         {:ok, resp} <- Client.exec(client, Request.select(inspect(mailbox_name))) do
+         {:ok, resp} <- Client.exec(client, cmd) do
       mailbox_status =
         Enum.reduce(resp, %{}, fn
           {"EXISTS", n}, acc -> Map.put(acc, :exists, n)
