@@ -5,6 +5,9 @@ defmodule Blop.Response do
 
   def extract({:ok, [response: response], "", _, _, _}) do
     extract(response)
+  catch
+    {:error, {rejection, error}} ->
+      {:error, {rejection, error}}
   end
 
   def extract(parts) do
@@ -66,9 +69,17 @@ defmodule Blop.Response do
 
   defp extract_message_data(
          {:response_done,
-          [response_tagged: [tag, {:resp_cond_state, ["OK", {:resp_text, message}]}]]}
+          [response_tagged: [tag, resp_cond_state: ["OK", {:resp_text, message}]]]}
        ) do
     {tag, message}
+  end
+
+  defp extract_message_data(
+         {:response_done,
+          [response_tagged: [_tag, resp_cond_state: [rejection, {:resp_text, error}]]]}
+       )
+       when rejection in ["NO", "BAD"] do
+    throw({:error, {rejection, error}})
   end
 
   defp extract_msg_att(["RFC822", ".HEADER", {:literal, [_number, body]}]) do

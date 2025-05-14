@@ -1,18 +1,19 @@
 alias Blop.{Client, Request, Response, Parser, Socket}
 
-client = with true <- File.exists?("secrets.json") do
-  secrets = File.read!("secrets.json") |> JSON.decode!()
+client =
+  with true <- File.exists?("secrets.json") do
+    secrets = File.read!("secrets.json") |> JSON.decode!()
 
-  {:ok, client} = Client.new(
-    host: secrets["host"],
-    ssl: [verify: :verify_none],
-    login: {secrets["username"], secrets["password"]}
-  )
+    {:ok, client} =
+      Client.new(
+        host: secrets["host"],
+        ssl: [verify: :verify_none],
+        login: {secrets["username"], secrets["password"]}
+      )
 
-  Client.list(client)
+    Client.list(client)
 
-  Client.select(client, "INBOX")
+    Client.select(client, "INBOX")
 
-  client
-end
-
+    client
+  end

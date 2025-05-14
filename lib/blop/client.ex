@@ -72,11 +72,10 @@ defmodule Blop.Client do
     end)
     |> tap(fn
       {:ok, client} ->
-        with {username, password} <- Map.get(opts, :login) do
-          __MODULE__.login(client, username, password)
+        with {username, password} <- Map.get(opts, :login),
+             :ok <- __MODULE__.login(client, username, password) do
+          {:ok, client}
         end
-
-        {:ok, client}
 
       {:error, reason} ->
         Logger.error("Failed to start IMAP client agent: #{inspect(reason)}")
@@ -90,6 +89,10 @@ defmodule Blop.Client do
   def login(client, username, password) do
     with {:ok, _} <- Client.exec(client, Request.login(username, password)) do
       Agent.update(client, &Map.put(&1, :logged_in, true))
+    else
+      {:error, reason} ->
+        Logger.error("Failed to log in: #{inspect(reason)}")
+        {:error, reason}
     end
   end
 
