@@ -14,6 +14,10 @@ defmodule Blop.Response do
     {:ok, Enum.map(parts, &extract_message_data/1)}
   end
 
+  defp extract_message_data({:response_data, ["*", {:capability_data, ["CAPABILITY" | caps]}]}) do
+    {:capability, Enum.map(caps, fn {:capability, capability} -> capability end)}
+  end
+
   defp extract_message_data(
          {:response_data, ["*", {:mailbox_data, [{:number, number}, property]}]}
        ) do

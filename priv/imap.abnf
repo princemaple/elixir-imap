@@ -110,8 +110,9 @@ capability      = ("AUTH=" auth-type) / atom
                     ; registered with IANA as standard or
                     ; standards-track
 
-capability-data = "CAPABILITY" *(SP capability) SP "IMAP4rev1"
-                  *(SP capability)
+capability-data =
+                ; Note(removed): hard requirement for checking IMAP4rev1 or IMAP4rev2
+                "CAPABILITY" *(SP capability)
                     ; Servers MUST implement the STARTTLS, AUTH=PLAIN,
                     ; and LOGINDISABLED capabilities
                     ; Servers which offer RFC 1730 compatibility MUST
