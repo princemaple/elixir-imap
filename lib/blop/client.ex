@@ -169,6 +169,14 @@ defmodule Blop.Client do
   @doc """
   Perform a FETCH command on the server to get a list of messages.
   """
+  @spec fetch(pid()) :: [Mail.Message.t()]
+  def fetch(client) do
+    do_fetch(
+      client,
+      Request.fetch(Request.sequence_set(__MODULE__.info(client, :selected_mailbox).exists))
+    )
+  end
+
   @spec fetch(pid(), sequence_set :: String.t()) :: [Mail.Message.t()]
   def fetch(client, sequence_set) do
     do_fetch(client, Request.fetch(Request.sequence_set(sequence_set)))
