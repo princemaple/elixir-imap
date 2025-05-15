@@ -43,7 +43,7 @@ defmodule Blop.Mixfile do
       {:mail, "~> 0.5"},
       {:castore, "~> 1.0"},
       {:abnf_parsec, "~> 2.0", runtime: false},
-      {:ex_doc, ">= 0.0.0", only: :dev, runtime: false}
+      {:ex_doc, ">= 0.0.0", only: [:dev, :docs], runtime: false}
     ]
   end
 
