@@ -37,7 +37,7 @@ defmodule Blop.Client do
 
   Connection options:
 
-  For exmaple when using `:ssl`
+  For example when using `:ssl`
 
   - `:ssl` - A list of options to pass to `:ssl.connect/4`. Default is `[:binary, active: false, cacertfile: CAStore.file_path()]`.
   """
