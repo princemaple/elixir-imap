@@ -1,0 +1,15 @@
+name: Spellcheck
+
+on: push
+
+jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Spell check
+        run: |
+          pip install codespell    
+          codespell -S deps,_build,.git,.elixir_ls -r "(?<!@)\\b[a-zA-Z0-9_'-]+\\b"
